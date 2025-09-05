@@ -1,0 +1,51 @@
+# ----------------------
+# Byte-compiled / Python artifacts
+# ----------------------
+__pycache__/
+*.py[cod]
+*$py.class
+
+# ----------------------
+# Environments
+# ----------------------
+# Ignora a pasta do virtualenv
+venv/
+env/
+.venv/
+.env/
+
+# ----------------------
+# Distribuição / Build
+# ----------------------
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# ----------------------
+# Arquivos de logs
+# ----------------------
+*.log
+
+# ----------------------
+# Configurações do editor / IDE
+# ----------------------
+# VSCode
+.vscode/
+
+# PyCharm
+.idea/
+
+# ----------------------
+# Arquivos de sistema
+# ----------------------
+.DS_Store
+Thumbs.db
+
+# ----------------------
+# Outros
+# ----------------------
+*.sqlite3
+*.db
+*.pyo
+*.pyd
