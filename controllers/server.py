@@ -1,6 +1,8 @@
 import socket
 import select
 from models.serverTypes import serverTypes
+from controllers.httpRequest import HttpRequest, HttpResponse
+from controllers.httpRouter import HttpRouter
 
 class httpServer:
     """
@@ -15,6 +17,7 @@ class httpServer:
         self.port = port
         self.IPV6_ADRESS = ipv6_adress
         self.type = type
+        self.router = HttpRouter() # Aqui iniciamo os roteadores HTTP
         
         self.server_socketIPV4 = None
         self.server_socketIPV6 = None
@@ -51,34 +54,27 @@ class httpServer:
         Inicia o servidor
         """
         server_list = self._create_server_list()
-        html_response = """\
-HTTP/1.1 200 OK
-Content-Type: text/html; charset=utf-8
-
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Meu Servidor HTTP</title>
-</head>
-<body>
-    <h1>Olá do Python HTTP Server!</h1>
-    <p>Este é um HTML enviado pelo servidor.</p>
-</body>
-</html>
-"""
+        
         while True:
             ready, _, _ = select.select(server_list, [], [])
             print(ready)
             for s in ready:
                 conn, addr = s.accept()
                 try:
-                    request = conn.recv(1024)
+                    request_data = conn.recv(1024)
                     print(f"Pedido recebido de {addr}")
-                    conn.sendall(html_response.encode())
-                except:
-                    print(f"Erro ao receber pedido de {addr}")
-                    conn.close()
-                    continue
+                    
+                    # Processa requisição e pega resposta do router
+                    request = HttpRequest(request_data)
+                    response = self.router.route(request)
+                    
+                    # Envia resposta para o cliente
+                    conn.sendall(response.to_bytes())
+                except Exception as e:
+                    print(f"Erro ao processar pedido de {addr}: {e}")
+
+                    error_response = HttpResponse.error_response(500)
+                    conn.sendall(error_response.to_bytes())
                 finally:
                     conn.close()
                
@@ -89,7 +85,7 @@ Content-Type: text/html; charset=utf-8
         if self.server_socketIPV4:
             
             self.server_socketIPV4.bind((self.adress, self.port))
-            self.server_socketIPV4.listen(5)  # <<< Faltava isso
+            self.server_socketIPV4.listen(5)  
             print(f"Servidor IPV4 iniciado na porta {self.port} na interface {self.adress}")
         if self.server_socketIPV6:
             self.server_socketIPV6.bind((self.IPV6_ADRESS, self.port))
@@ -110,9 +106,8 @@ Content-Type: text/html; charset=utf-8
         """
         Fecha o servidor
         """
-        self.server_socketIPV4.close()
-        self.server_socketIPV6.close()
+        if self.server_socketIPV4:
+            self.server_socketIPV4.close()
+        if self.server_socketIPV6:
+            self.server_socketIPV6.close()
         print('Servidor fechado')
-    
-
-
