@@ -25,6 +25,7 @@ class HttpRouter:
         self.add_route(HttpMethod.GET, "/api/data", self._api_data_get_handler)
         self.add_route(HttpMethod.DELETE, "/api/data", self._api_data_delete_handler)
         self.add_route(HttpMethod.PATCH, "/api/data", self._api_data_patch_handler)
+        self.add_route(HttpMethod.GET, "/health", self._health_handler)
         
     
     def add_route(self, method: HttpMethod, path: str, handler: Callable[[HttpRequest], HttpResponse]):
@@ -182,5 +183,11 @@ curl -X DELETE http://localhost:8080/api/data
         Simula a remoção de um recurso.
         """
         return HttpResponse.json_response({"message": "Recurso deletado com sucesso."}, status_code=HttpStatus.NO_CONTENT.value)
+
+    def _health_handler(self, request: HttpRequest) -> HttpResponse:
+
+        data = {"status": "ok", "message": "Servidor em funcionamento"}
+        return HttpResponse.json_response(data)
+
 
         
