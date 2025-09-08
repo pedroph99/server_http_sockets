@@ -185,7 +185,6 @@ curl -X DELETE http://localhost:8080/api/data
         return HttpResponse.json_response({"message": "Recurso deletado com sucesso."}, status_code=HttpStatus.NO_CONTENT.value)
 
     def _health_handler(self, request: HttpRequest) -> HttpResponse:
-
         data = {"status": "ok", "message": "Servidor em funcionamento"}
         return HttpResponse.json_response(data)
 
