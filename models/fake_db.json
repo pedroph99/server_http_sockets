@@ -1,0 +1,1 @@
+{"admin": {"name": "Admin", "email": "admin@example.com", "password": "admin"}, "user": {"name": "User", "email": "user@example.com", "password": "user"}, "pedro": {"name": "pedro", "age": 30, "teste": "teste"}}

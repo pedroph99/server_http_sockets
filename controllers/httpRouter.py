@@ -1,4 +1,5 @@
 from typing import Dict, Callable, Optional
+from controllers.database import Database
 from models.httpMethods import HttpMethod, HttpStatus
 from controllers.httpRequest import HttpRequest, HttpResponse
 
@@ -162,12 +163,16 @@ curl -X DELETE http://localhost:8080/api/data
         data = {"id": 123, "name": "Exemplo de Recurso", "status": "active"}
         return HttpResponse.json_response(data)
 
-    def _api_data_post_handler(self, req: HttpRequest) -> HttpResponse:
+    def _api_data_post_handler(self, req: HttpRequest, database: Database = Database()) -> HttpResponse:
             """
             Handler para requisições POST para /api/data.
             Simula a criação de um recurso.
             """
             # Você pode processar o body aqui, por exemplo, req.body
+            if database:
+                print(req.body)
+                database.save_data(req.body)
+            
             return HttpResponse.json_response({"message": "Recurso criado com sucesso!", "data_received": req.body}, status_code=HttpStatus.CREATED.value)
 
     def _api_data_patch_handler(self, req: HttpRequest) -> HttpResponse:

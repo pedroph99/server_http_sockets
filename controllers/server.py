@@ -1,5 +1,6 @@
 import socket
 import select
+from controllers.database import Database
 from models.serverTypes import serverTypes
 from controllers.httpRequest import HttpRequest, HttpResponse
 from controllers.httpRouter import HttpRouter
@@ -55,6 +56,7 @@ class httpServer:
         Inicia o servidor
         """
         server_list = self._create_server_list()
+        database = Database()
         
         while True:
             ready, _, _ = select.select(server_list, [], [])
