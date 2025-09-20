@@ -7,12 +7,15 @@ if __name__ == '__main__':
     dict_args = Preprocessing.args_parser()
     server_port = dict_args['SERVER_PORT']
     type_server = dict_args['TYPE_SERVER']
+    print(f"Porta: {server_port}")
+    print(f"Tipo de servidor: {type_server}")
     # Cria o servidor de acordo com a porta e o tipo de servidor
     print(f"Iniciando servidor {type_server} na porta {server_port}")
    
     httpserver = httpServer(
                             port=server_port, 
-                            type=type_server)
+                            type=type_server,
+                            )
     try:
         print('Iniciando servidor...')
         httpserver.start()

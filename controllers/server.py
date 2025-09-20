@@ -28,10 +28,11 @@ class httpServer:
         """
         Seta os valores do socket
         """
-        if self.type != serverTypes.IPV6:
+        if self.type != serverTypes.IPV6.value:
             self.server_socketIPV4 = self.configureServerIP(is_ipv6=False)
         
-        if self.type != serverTypes.IPV4:
+        if self.type != serverTypes.IPV4.value:
+            print(f"Servidor type {self.type } {serverTypes.IPV4.value}")
             self.server_socketIPV6 = self.configureServerIP(is_ipv6=True)
             self.server_socketIPV6.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_V6ONLY, 1) 
             
@@ -57,7 +58,6 @@ class httpServer:
         
         while True:
             ready, _, _ = select.select(server_list, [], [])
-            print(ready)
             for s in ready:
                 conn, addr = s.accept()
                 try:
@@ -88,6 +88,7 @@ class httpServer:
             self.server_socketIPV4.listen(5)  
             print(f"Servidor IPV4 iniciado na porta {self.port} na interface {self.adress}")
         if self.server_socketIPV6:
+           
             self.server_socketIPV6.bind((self.IPV6_ADRESS, self.port))
             self.server_socketIPV6.listen(5)
             print(f"Servidor IPV6 iniciado na porta {self.port} na interface {self.IPV6_ADRESS}")
